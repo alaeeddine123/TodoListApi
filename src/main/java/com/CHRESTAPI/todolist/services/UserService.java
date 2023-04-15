@@ -12,4 +12,11 @@ public interface UserService {
     Optional<User> findByUsername(String username);
 
     public List<User> findAll();
+
+    void createUser(User user);
+
+    void updateUser(User user);
+
+
+
 }
