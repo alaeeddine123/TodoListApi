@@ -37,6 +37,6 @@ public class Task {
     private LocalDateTime dateTimeReminder;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    private TodoList todoList;
+    private TodoList taskList;
 
 }

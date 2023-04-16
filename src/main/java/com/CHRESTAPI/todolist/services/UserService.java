@@ -1,10 +1,14 @@
 package com.CHRESTAPI.todolist.services;
 
 import com.CHRESTAPI.todolist.entities.User;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
+
+
+@Service
 public interface UserService {
 
     Optional<User> finById(Long id);
