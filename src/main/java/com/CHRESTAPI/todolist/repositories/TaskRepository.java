@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 
@@ -16,7 +17,7 @@ public interface TaskRepository extends JpaRepository<Task,Long> {
 
     List<Task> findByTaskList(String taskList);
 
-    List<Task> findByTaskstatus(String status);
+    Optional<Task> findByTaskstatus(String status);
 
     List<Task> findByDate(LocalDate date);
 
