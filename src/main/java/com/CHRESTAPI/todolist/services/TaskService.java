@@ -18,7 +18,7 @@ public interface TaskService {
 
     List<Task> findByTaskList(String taskList);
 
-    List<Task> findByTaskstatus(String status);
+    Optional <Task> findByTaskstatus(String status);
 
     List<Task> findByDate(LocalDate date);
 

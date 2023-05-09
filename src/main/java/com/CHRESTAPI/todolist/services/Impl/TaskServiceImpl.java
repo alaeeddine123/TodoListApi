@@ -2,7 +2,6 @@ package com.CHRESTAPI.todolist.services.Impl;
 
 import com.CHRESTAPI.todolist.entities.Task;
 import com.CHRESTAPI.todolist.enums.priority;
-import com.CHRESTAPI.todolist.exception.ElementNotFoundException;
 import com.CHRESTAPI.todolist.repositories.TaskRepository;
 import com.CHRESTAPI.todolist.services.TaskService;
 import org.springframework.stereotype.Service;
@@ -45,7 +44,7 @@ public class TaskServiceImpl  implements TaskService {
     }
 
     @Override
-    public List<Task> findByTaskstatus(String status) {
+    public Optional<Task> findByTaskstatus(String status) {
         return taskRepository.findByTaskstatus(status);
     }
 

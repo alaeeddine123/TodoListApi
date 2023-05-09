@@ -41,9 +41,31 @@ public class TaskController {
         }
     }
 
- //   List<Task> findByTaskstatus(String status);
 
-  //  List<Task> findByDate(LocalDate date);
+    @GetMapping("/findbytaskstatus")
+    public Optional<Task> findByTaskStatus(@PathVariable String status ){
+        try {
+            return taskService.findByTaskstatus(status);
+        }catch(ElementNotFoundException e){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,e.getMessage(),e);
+        }
+    }
+
+    @GetMapping("/findbydate")
+    public List<Task>  findByDate(@PathVariable LocalDate date){
+        try {
+            return taskService.findByDate(date);
+        }catch(ElementNotFoundException e){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,e.getMessage(),e);
+        }
+    }
+
+
+
+
+
+
+
 
  //   List<Task> findByDateTimeReminderBetween(LocalDateTime start, LocalDateTime end);
 
