@@ -24,7 +24,7 @@ import java.util.List;
         @GeneratedValue(strategy = GenerationType.IDENTITY)
         private Long id;
 
-        @Column(nullable = false, unique = true)
+        @Column( unique = true)
         private String username;
 
         @Column(nullable = false)

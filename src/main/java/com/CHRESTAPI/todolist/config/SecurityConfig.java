@@ -26,6 +26,8 @@ public class SecurityConfig   {
 
     private final JwtAuthenticationFilter jwtAuthFilter ;
     private final  AuthenticationProvider authenticationProvider;
+
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
 
@@ -34,9 +36,10 @@ public class SecurityConfig   {
        httpSecurity.csrf().disable()
                 .authorizeHttpRequests()
                 .antMatchers("/").permitAll()
-                .antMatchers("/api/v1/task").permitAll()
-                .anyRequest().authenticated().and().
-                sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .antMatchers("/api/v1/task/**").permitAll()
+                .antMatchers("/api/v1/auth/**").permitAll()
+                .anyRequest().authenticated().and()
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
