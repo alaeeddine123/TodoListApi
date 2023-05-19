@@ -4,6 +4,7 @@ import com.CHRESTAPI.todolist.config.jwtconfig.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -37,12 +38,14 @@ public class SecurityConfig   {
                 .authorizeHttpRequests()
                 .antMatchers("/").permitAll()
                 .antMatchers("/api/v1/task/**").permitAll()
+                .antMatchers("/h2-console/**").permitAll()
                 .antMatchers("/api/v1/auth/**").permitAll()
                 .anyRequest().authenticated().and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authenticationProvider(authenticationProvider)
-                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
+                .headers(headers -> headers.frameOptions().sameOrigin());
 
        return httpSecurity.build();
 
