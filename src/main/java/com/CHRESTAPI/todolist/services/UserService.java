@@ -1,5 +1,6 @@
 package com.CHRESTAPI.todolist.services;
 
+import com.CHRESTAPI.todolist.dto.UserDto;
 import com.CHRESTAPI.todolist.entities.User;
 import org.springframework.stereotype.Service;
 
@@ -15,12 +16,13 @@ public interface UserService {
 
     Optional<User> findByUsername(String username);
 
-    public List<User> findAll();
+    public List<UserDto> findAll();
 
     void createUser(User user);
 
-    void updateUser(User user);
 
 
+    UserDto save(UserDto userDto);
 
+    UserDto updateUser(UserDto userDto);
 }

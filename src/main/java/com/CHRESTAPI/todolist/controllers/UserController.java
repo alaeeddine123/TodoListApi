@@ -1,7 +1,7 @@
 package com.CHRESTAPI.todolist.controllers;
 
 import com.CHRESTAPI.todolist.dto.UserDto;
-import com.CHRESTAPI.todolist.entities.User;
+
 import com.CHRESTAPI.todolist.services.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -10,7 +10,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
+
 
 
 @RestController
@@ -36,7 +36,7 @@ public class UserController {
     // edit this endpoint so it wont return all user deatils
     @PreAuthorize("hasRole('USER')")
     @GetMapping("/getusers")
-    public List<User> getUsers(){
+    public List <UserDto> getUsers() {
         return userService.findAll();
     }
 
@@ -48,6 +48,17 @@ public class UserController {
                .body(UserDto.fromEntity(user)))
                .orElse(ResponseEntity.notFound().build());
 
+    }
+    @PreAuthorize("hasRole('USER')")
+    @PostMapping("/createuser")
+    public ResponseEntity<UserDto> createuser(@RequestBody UserDto userDto){
+        UserDto createdUser = userService.save(userDto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdUser);
+    }
+
+    public ResponseEntity<UserDto> updateuser(@RequestBody UserDto userDto){
+        UserDto updatedUser = userService.updateUser(userDto);
+        return null;
     }
 
 }
