@@ -24,15 +24,6 @@ public class TaskServiceImpl  implements TaskService {
         this.taskRepository = taskRepository;
     }
 
-  /*  @Override
-    public Optional<Task> finByTaskId(Long id) {
-        Optional<Task> task = taskRepository.findById(id);
-        if (task == null) {
-            throw ElementNotFoundException.taskNotFound(id);
-        }
-        return task;
-    }*/
-
     @Override
     public Optional<Task> finByTaskId(Long id) {
         return Optional.empty();

@@ -6,8 +6,10 @@ import com.CHRESTAPI.todolist.services.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.StreamingHttpOutputMessage;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -46,7 +48,7 @@ public class UserController {
 
        return  userService.finById(id).map(user -> ResponseEntity.status(HttpStatus.OK)
                .body(UserDto.fromEntity(user)))
-               .orElse(ResponseEntity.notFound().build());
+               .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,"user not found"));
 
     }
     @PreAuthorize("hasRole('USER')")
@@ -56,9 +58,12 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).body(createdUser);
     }
 
+    @PreAuthorize("hasRole('USER')")
+    @PostMapping("/updateuser")
     public ResponseEntity<UserDto> updateuser(@RequestBody UserDto userDto){
         UserDto updatedUser = userService.updateUser(userDto);
-        return null;
+        return ResponseEntity.status(HttpStatus.OK).body(updatedUser);
+
     }
 
 }

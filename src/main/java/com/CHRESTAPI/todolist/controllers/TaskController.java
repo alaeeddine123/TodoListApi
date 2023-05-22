@@ -7,6 +7,7 @@ import com.CHRESTAPI.todolist.exception.ElementNotFoundException;
 import com.CHRESTAPI.todolist.services.TaskService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,7 +32,7 @@ public class TaskController {
         this.taskService = taskService;
     }
 
-
+    @PreAuthorize("hasRole('USER')")
     @GetMapping("/findbytasklist")
     public Optional<Task> findById(@PathVariable Long id) {
         try {
@@ -41,7 +42,7 @@ public class TaskController {
         }
     }
 
-
+    @PreAuthorize("hasRole('USER')")
     @GetMapping("/findbytaskstatus")
     public Optional<Task> findByTaskStatus(@PathVariable String status ){
         try {
@@ -51,6 +52,7 @@ public class TaskController {
         }
     }
 
+    @PreAuthorize("hasRole('USER')")
     @GetMapping("/findbydate")
     public List<Task>  findByDate(@PathVariable LocalDate date){
         try {
