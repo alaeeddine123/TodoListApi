@@ -62,7 +62,7 @@ class TaskControllerTest {
             when(taskService.finByTaskId(taskId)).thenReturn(Optional.of(task));
 
             // Act
-            Optional<Task> result = taskController.findById(taskId);
+            Optional<Task> result = Optional.ofNullable(taskController.findById(taskId));
 
             // Assert
             assertTrue(result.isPresent());

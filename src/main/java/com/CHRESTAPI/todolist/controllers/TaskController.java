@@ -34,12 +34,9 @@ public class TaskController {
 
     @PreAuthorize("hasRole('USER')")
     @GetMapping("/findbytasklist")
-    public Optional<Task> findById(@PathVariable Long id) {
-        try {
-            return taskService.finByTaskId(id);
-        } catch (ElementNotFoundException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
-        }
+    public Task findById(@PathVariable Long id) {
+        return taskService.finByTaskId(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Task not found with ID: " + id));
     }
 
     @PreAuthorize("hasRole('USER')")
