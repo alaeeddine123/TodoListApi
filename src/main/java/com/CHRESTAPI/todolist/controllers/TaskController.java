@@ -14,11 +14,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.naming.ServiceUnavailableException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @RestController
 @Slf4j
@@ -26,6 +28,9 @@ import java.util.Set;
 public class TaskController {
 
     private final TaskService taskService;
+
+    private static final Logger logger = LoggerFactory.getLogger(TaskController.class);
+
 
 
     public TaskController(TaskService taskService) {
@@ -59,14 +64,37 @@ public class TaskController {
         }
     }
 
+    @PreAuthorize("hasRole('USER')")
+    @GetMapping("/findbydatetimereminderbetween")
+    public List<Task> finByDateTimeReminderBetween(@PathVariable LocalDateTime start, LocalDateTime end) {
+        try {
+            List<Task> tasks = taskService.findByDateTimeReminderBetween(start, end);
+            if (tasks.isEmpty()) {
+                throw new ElementNotFoundException("Element not found");
+            }
+            return tasks;
+        } catch (ElementNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+        } catch (IllegalArgumentException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid arguments", e);
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Internal server error", e);
+        }
+    }
 
 
 
 
+    public List<Task> findByTaskPriority(@PathVariable priority priority){
+        try {
+            List<Task> tasks = taskService.findByTaskPriority(priority);
+            if (tasks.isEmpty()) {
+                throw new ElementNotFoundException("Element not found");
+            }
 
-
-
- //   List<Task> findByDateTimeReminderBetween(LocalDateTime start, LocalDateTime end);
+    }catch (ElementNotFoundException e){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,e.getMessage(),e);
+        }
 
    // List<Task> findByTaskPriority(priority priority);
 
