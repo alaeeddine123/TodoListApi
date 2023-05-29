@@ -35,7 +35,6 @@ public class UserController {
         return ("<h1>Welcome to home page <h1>");
     }
 
-    // edit this endpoint so it wont return all user deatils
     @PreAuthorize("hasRole('USER')")
     @GetMapping("/getusers")
     public List <UserDto> getUsers() {

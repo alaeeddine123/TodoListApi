@@ -14,11 +14,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
-import javax.naming.ServiceUnavailableException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,7 +31,6 @@ public class TaskController {
     private final TaskService taskService;
 
     private static final Logger logger = LoggerFactory.getLogger(TaskController.class);
-
 
 
     public TaskController(TaskService taskService) {
@@ -46,21 +46,21 @@ public class TaskController {
 
     @PreAuthorize("hasRole('USER')")
     @GetMapping("/findbytaskstatus")
-    public Optional<Task> findByTaskStatus(@PathVariable String status ){
+    public Optional<Task> findByTaskStatus(@PathVariable String status) {
         try {
             return taskService.findByTaskstatus(status);
-        }catch(ElementNotFoundException e){
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND,e.getMessage(),e);
+        } catch (ElementNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
         }
     }
 
     @PreAuthorize("hasRole('USER')")
     @GetMapping("/findbydate")
-    public List<Task>  findByDate(@PathVariable LocalDate date){
+    public List<Task> findByDate(@PathVariable LocalDate date) {
         try {
             return taskService.findByDate(date);
-        }catch(ElementNotFoundException e){
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND,e.getMessage(),e);
+        } catch (ElementNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
         }
     }
 
@@ -83,24 +83,47 @@ public class TaskController {
     }
 
 
-
-
-    public List<Task> findByTaskPriority(@PathVariable priority priority){
+    @PreAuthorize("hasRole('USER')")
+    @GetMapping("/findbytaskpriority")
+    public List<Task> findByTaskPriority(@PathVariable priority priority) {
         try {
             List<Task> tasks = taskService.findByTaskPriority(priority);
             if (tasks.isEmpty()) {
                 throw new ElementNotFoundException("Element not found");
             }
-
-    }catch (ElementNotFoundException e){
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND,e.getMessage(),e);:wq:
+        return tasks;
+        } catch (ElementNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
         }
+    }
 
-   // List<Task> findByTaskPriority(priority priority);
+    @PreAuthorize("hasrole('USER')")
+    @GetMapping("/findbycategory")
+    public List<Task> findbycategory(@PathVariable String category){
+        try{
+            List<Task> tasks = taskService.findByCategory(category);
+            if (tasks.isEmpty()){
+                throw  new ElementNotFoundException("element not found");
+            }
+            return tasks;
+        }catch (ElementNotFoundException e){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,e.getMessage(),e);
+        }
+    }
 
-  //  List<Task> findByCategory(String category);
-
-  //  List<Task> findByTagsIn(Set<String> tags);
-
+    @PreAuthorize("hasrole('USER')")
+    @GetMapping("/findbytagsin")
+    public List<Task> findByTagsIn(@PathVariable Set<String> tags){
+        try{
+            List<Task> tasks = taskService.findByTagsIn(tags);
+            if (tasks.isEmpty()) throw new ElementNotFoundException("element not found");
+            return tasks;
+        }catch (ElementNotFoundException e){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(),e);
+        }
+    }
 
 }
+
+
+
