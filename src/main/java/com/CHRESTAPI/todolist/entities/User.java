@@ -11,6 +11,9 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.Collection;
 import java.util.List;
 
@@ -26,22 +29,27 @@ import java.util.List;
         @GeneratedValue(strategy = GenerationType.IDENTITY)
         private Long id;
 
-        @Column( unique = true)
+         @Column(unique = true)
+         @NotNull
         private String username;
 
-        @Column(nullable = false)
+         @Column(nullable = false)
+         @NotNull
         private String password;
 
-        @Column(nullable = false, unique = true)
+         @Column(nullable = false, unique = true)
+         @NotNull
         private String email;
 
-        @Column(nullable = false)
+         @Column(nullable = false)
+         @NotNull
         private String firstName;
 
-        @Column(nullable = false)
+         @Column(nullable = false)
+         @NotNull
         private String lastName;
 
-        @Enumerated(EnumType.STRING)
+    @Enumerated(EnumType.STRING)
         private Role role;
 
     @Override

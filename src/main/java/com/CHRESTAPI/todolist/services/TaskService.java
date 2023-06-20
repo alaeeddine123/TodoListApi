@@ -1,5 +1,6 @@
 package com.CHRESTAPI.todolist.services;
 
+import com.CHRESTAPI.todolist.dto.TaskDto;
 import com.CHRESTAPI.todolist.entities.Task;
 import com.CHRESTAPI.todolist.enums.priority;
 import org.springframework.stereotype.Service;
@@ -29,5 +30,9 @@ public interface TaskService {
     List<Task> findByCategory(String category);
 
     List<Task> findByTagsIn(Set<String> tags);
+
+    TaskDto save(TaskDto taskDto);
+
+    void saveUser(Task task);
 }
 

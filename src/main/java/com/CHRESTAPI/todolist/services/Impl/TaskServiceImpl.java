@@ -1,5 +1,6 @@
 package com.CHRESTAPI.todolist.services.Impl;
 
+import com.CHRESTAPI.todolist.dto.TaskDto;
 import com.CHRESTAPI.todolist.entities.Task;
 import com.CHRESTAPI.todolist.enums.priority;
 import com.CHRESTAPI.todolist.repositories.TaskRepository;
@@ -62,5 +63,15 @@ public class TaskServiceImpl  implements TaskService {
     @Override
     public List<Task> findByTagsIn(Set<String> tags) {
         return taskRepository.findByTagsIn(tags);
+    }
+
+    @Override
+    public TaskDto save(TaskDto taskDto) {
+        return null;
+    }
+
+    @Override
+    public void saveUser(Task task) {
+     taskRepository.save(task);
     }
 }
