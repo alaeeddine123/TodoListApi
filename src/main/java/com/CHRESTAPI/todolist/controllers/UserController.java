@@ -29,11 +29,6 @@ public class UserController {
 
 
 
-    @GetMapping("/test")
-    public String test(){
-        return("welcome to test page");
-    }
-
     @PreAuthorize("hasRole('USER')")
     @GetMapping("/home")
     public String home() {

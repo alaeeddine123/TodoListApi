@@ -1,17 +1,18 @@
 package com.CHRESTAPI.todolist.controllers;
 
 
+import com.CHRESTAPI.todolist.dto.TaskDto;
+import com.CHRESTAPI.todolist.dto.UserDto;
 import com.CHRESTAPI.todolist.entities.Task;
 import com.CHRESTAPI.todolist.enums.priority;
+import com.CHRESTAPI.todolist.errors.ErrorResponse;
 import com.CHRESTAPI.todolist.exception.ElementNotFoundException;
 import com.CHRESTAPI.todolist.services.TaskService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
@@ -20,9 +21,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 @RestController
 @Slf4j
 @RequestMapping("/api/v1/task")
@@ -30,23 +28,20 @@ public class TaskController {
 
     private final TaskService taskService;
 
-    private static final Logger logger = LoggerFactory.getLogger(TaskController.class);
-
-
     public TaskController(TaskService taskService) {
         this.taskService = taskService;
     }
 
-    @PreAuthorize("hasRole('USER')")
-    @GetMapping("/findbytasklist")
-    public Task findById(@PathVariable Long id) {
+    @GetMapping("/findbytasklist/{id}")
+    public ResponseEntity<Task> findById(@PathVariable Long id) {
         return taskService.finByTaskId(id)
+                .map(ResponseEntity::ok)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Task not found with ID: " + id));
     }
 
-    @PreAuthorize("hasRole('USER')")
-    @GetMapping("/findbytaskstatus")
+    @GetMapping("/findbytaskstatus/{status}")
     public Optional<Task> findByTaskStatus(@PathVariable String status) {
+
         try {
             return taskService.findByTaskstatus(status);
         } catch (ElementNotFoundException e) {
@@ -54,8 +49,7 @@ public class TaskController {
         }
     }
 
-    @PreAuthorize("hasRole('USER')")
-    @GetMapping("/findbydate")
+    @GetMapping("/findbydate/{date}")
     public List<Task> findByDate(@PathVariable LocalDate date) {
         try {
             return taskService.findByDate(date);
@@ -64,8 +58,7 @@ public class TaskController {
         }
     }
 
-    @PreAuthorize("hasRole('USER')")
-    @GetMapping("/findbydatetimereminderbetween")
+    @GetMapping("/findbydatetimereminderbetween/{start}/{end}")
     public List<Task> finByDateTimeReminderBetween(@PathVariable LocalDateTime start, LocalDateTime end) {
         try {
             List<Task> tasks = taskService.findByDateTimeReminderBetween(start, end);
@@ -82,9 +75,7 @@ public class TaskController {
         }
     }
 
-
-    @PreAuthorize("hasRole('USER')")
-    @GetMapping("/findbytaskpriority")
+    @GetMapping("/findbytaskpriority/{priority}")
     public List<Task> findByTaskPriority(@PathVariable priority priority) {
         try {
             List<Task> tasks = taskService.findByTaskPriority(priority);
@@ -96,9 +87,7 @@ public class TaskController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
         }
     }
-
-    @PreAuthorize("hasrole('USER')")
-    @GetMapping("/findbycategory")
+    @GetMapping("/findbycategory/{category}")
     public List<Task> findbycategory(@PathVariable String category){
         try{
             List<Task> tasks = taskService.findByCategory(category);
@@ -111,7 +100,6 @@ public class TaskController {
         }
     }
 
-    @PreAuthorize("hasrole('USER')")
     @GetMapping("/findbytagsin")
     public List<Task> findByTagsIn(@PathVariable Set<String> tags){
         try{
@@ -122,6 +110,27 @@ public class TaskController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(),e);
         }
     }
+    @PostMapping("/createuser")
+    public ResponseEntity<TaskDto> createTask(@RequestBody TaskDto taskDto){
+        TaskDto createdUser = taskService.save(taskDto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdUser);
+    }
+    @ExceptionHandler(ElementNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ErrorResponse handleElementNotFoundException(ElementNotFoundException ex) {
+        return new ErrorResponse(HttpStatus.NOT_FOUND.value(), ex.getMessage());
+    }
+    @ExceptionHandler(IllegalArgumentException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse handleIllegalArgumentException(IllegalArgumentException ex) {
+        return new ErrorResponse(HttpStatus.BAD_REQUEST.value(), ex.getMessage());
+    }
+    @ExceptionHandler(Exception.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ErrorResponse handleInternalServerError(Exception ex) {
+        return new ErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Internal server error");
+    }
+
 
 }
 
