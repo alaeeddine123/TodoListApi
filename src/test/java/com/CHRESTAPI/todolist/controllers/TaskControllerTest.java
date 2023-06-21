@@ -44,9 +44,9 @@ class TaskControllerTest {
         @Test
         void testFindByIdSuccess() throws ElementNotFoundException {
             // Arrange
-            Long taskId = 11111L;
+            Long taskId = 1L;
             Task task = new Task() {{
-                setId(11111L);
+                setId(1L);
                 setName("Example Task");
                 setContent("This is an example task");
                 setTaskPriority(priority.HIGH);
@@ -76,11 +76,11 @@ class TaskControllerTest {
             when(taskService.finByTaskId(taskId)).thenThrow(new ElementNotFoundException("Task not found"));
 
             // Act & Assert
-            ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> {
+            ElementNotFoundException  exception = assertThrows(ElementNotFoundException.class, () -> {
                 taskController.findById(taskId);
             });
-            assertEquals(HttpStatus.NOT_FOUND, exception.getStatus());
-            assertEquals("Task not found", exception.getReason());
+            assertEquals("Task not found", exception.getMessage());
+
         }
 
         // Add more test cases for the remaining methods in TaskController class

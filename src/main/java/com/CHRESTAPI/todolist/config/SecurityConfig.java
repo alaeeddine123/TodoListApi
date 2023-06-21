@@ -37,6 +37,7 @@ public class SecurityConfig   {
        httpSecurity.csrf().disable()
                 .authorizeHttpRequests()
                 .antMatchers("/").permitAll()
+                .antMatchers("/api/v1/**").permitAll()
                 .antMatchers("/api/v1/task/**").permitAll()
                 .antMatchers("/h2-console/**").permitAll()
                 .antMatchers("/api/v1/auth/**").permitAll()
