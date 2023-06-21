@@ -1,6 +1,5 @@
 package com.CHRESTAPI.todolist.services.Impl;
 
-import com.CHRESTAPI.todolist.dto.TaskDto;
 import com.CHRESTAPI.todolist.entities.Task;
 import com.CHRESTAPI.todolist.enums.priority;
 import com.CHRESTAPI.todolist.exception.ElementNotFoundException;
@@ -70,7 +69,7 @@ public class TaskServiceImpl  implements TaskService {
     }
 
     @Override
-    public TaskDto save(TaskDto taskDto) {
+    public Task save(Task task) {
         return null;
     }
 

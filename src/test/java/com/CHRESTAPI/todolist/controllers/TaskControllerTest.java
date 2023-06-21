@@ -7,9 +7,8 @@ import com.CHRESTAPI.todolist.exception.ElementNotFoundException;
 import com.CHRESTAPI.todolist.services.TaskService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.server.ResponseStatusException;
+
 import java.time.LocalTime;
 import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;

@@ -5,8 +5,6 @@ import com.CHRESTAPI.todolist.config.jwtconfig.JwtService;
 import com.CHRESTAPI.todolist.entities.User;
 import com.CHRESTAPI.todolist.repositories.UserRepository;
 import lombok.Builder;
-import lombok.RequiredArgsConstructor;
-import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

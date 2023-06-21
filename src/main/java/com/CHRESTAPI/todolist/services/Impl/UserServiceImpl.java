@@ -6,7 +6,6 @@ import com.CHRESTAPI.todolist.repositories.UserRepository;
 import com.CHRESTAPI.todolist.services.UserService;
 import com.CHRESTAPI.todolist.validators.UserValidator;
 import org.springframework.stereotype.Service;
-import org.springframework.validation.Validator;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.List;

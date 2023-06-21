@@ -1,7 +1,6 @@
 package com.CHRESTAPI.todolist.dto;
 
 import com.CHRESTAPI.todolist.entities.Task;
-import com.CHRESTAPI.todolist.entities.User;
 import com.CHRESTAPI.todolist.enums.TaskStatus;
 import com.CHRESTAPI.todolist.enums.priority;
 import lombok.AllArgsConstructor;
