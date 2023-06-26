@@ -3,7 +3,7 @@ package com.CHRESTAPI.todolist.controllers;
 
 import com.CHRESTAPI.todolist.dto.TaskDto;
 import com.CHRESTAPI.todolist.entities.Task;
-import com.CHRESTAPI.todolist.enums.priority;
+import com.CHRESTAPI.todolist.enums.Priority;
 import com.CHRESTAPI.todolist.errors.ErrorResponse;
 import com.CHRESTAPI.todolist.exception.ElementNotFoundException;
 import com.CHRESTAPI.todolist.services.TaskService;
@@ -74,7 +74,7 @@ public class TaskController {
     }
 
     @GetMapping("/findbytaskpriority/{priority}")
-    public List<Task> findByTaskPriority(@PathVariable priority priority) {
+    public List<Task> findByTaskPriority(@PathVariable Priority priority) {
         try {
             List<Task> tasks = taskService.findByTaskPriority(priority);
             if (tasks.isEmpty()) {
