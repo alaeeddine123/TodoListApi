@@ -1,7 +1,7 @@
 package com.CHRESTAPI.todolist.services;
 
 import com.CHRESTAPI.todolist.entities.Task;
-import com.CHRESTAPI.todolist.enums.priority;
+import com.CHRESTAPI.todolist.enums.Priority;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -24,14 +24,12 @@ public interface TaskService {
 
     List<Task> findByDateTimeReminderBetween(LocalDateTime start, LocalDateTime end);
 
-    List<Task> findByTaskPriority(priority priority);
+    List<Task> findByTaskPriority(Priority priority);
 
     List<Task> findByCategory(String category);
 
     List<Task> findByTagsIn(Set<String> tags);
 
-    public Task save(Task task);
-
-    void saveUser(Task task);
+    Task save(Task task);
 }
 

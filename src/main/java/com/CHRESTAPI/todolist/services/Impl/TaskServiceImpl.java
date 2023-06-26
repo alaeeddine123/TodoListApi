@@ -1,7 +1,7 @@
 package com.CHRESTAPI.todolist.services.Impl;
 
 import com.CHRESTAPI.todolist.entities.Task;
-import com.CHRESTAPI.todolist.enums.priority;
+import com.CHRESTAPI.todolist.enums.Priority;
 import com.CHRESTAPI.todolist.exception.ElementNotFoundException;
 import com.CHRESTAPI.todolist.repositories.TaskRepository;
 import com.CHRESTAPI.todolist.services.TaskService;
@@ -28,13 +28,20 @@ public class TaskServiceImpl  implements TaskService {
     @Override
     public Optional<Task> finByTaskId(Long id) {
 
-    return Optional.ofNullable(taskRepository.findById(id).orElseThrow(()-> new ElementNotFoundException("Task not found")));
+        if(id == null || id <= 0){
+            throw  new  IllegalArgumentException("Invalid task id");
+        }
+        return Optional.ofNullable(taskRepository
+            .findById(id).orElseThrow(()-> new ElementNotFoundException("Task not found")));
 
 
     }
 
     @Override
     public List<Task> findByTaskList(String taskList) {
+        if(taskList == null || taskList.isEmpty()){
+            throw   new IllegalArgumentException("Task list null or empty");
+        }
         return taskRepository.findByTaskList(taskList);
     }
 
@@ -54,7 +61,7 @@ public class TaskServiceImpl  implements TaskService {
     }
 
     @Override
-    public List<Task> findByTaskPriority(priority priority) {
+    public List<Task> findByTaskPriority(Priority priority) {
         return taskRepository.findByTaskPriority(priority);
     }
 
@@ -68,13 +75,12 @@ public class TaskServiceImpl  implements TaskService {
         return taskRepository.findByTagsIn(tags);
     }
 
-    @Override
-    public Task save(Task task) {
-        return null;
-    }
+
 
     @Override
-    public void saveUser(Task task) {
+    public Task save(Task task) {
      taskRepository.save(task);
+        return task;
     }
 }
+
