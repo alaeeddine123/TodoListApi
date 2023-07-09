@@ -25,7 +25,7 @@ public class SecurityConfig   {
 
 
 
-       httpSecurity.csrf().disable()
+        httpSecurity.csrf().disable()
                 .authorizeHttpRequests()
                 .antMatchers("/").permitAll()
                 .antMatchers("/api/v1/**").permitAll()
@@ -52,7 +52,7 @@ public class SecurityConfig   {
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
                 .headers(headers -> headers.frameOptions().sameOrigin());
 
-       return httpSecurity.build();
+        return httpSecurity.build();
 
     }
 

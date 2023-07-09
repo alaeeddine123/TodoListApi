@@ -14,6 +14,10 @@ public interface UserService {
 
     Optional<User> finById(Long id);
 
+    Optional<User> findByusernameOrEmail(String email, String username);
+
+    Optional<User> findByEmail(String email);
+
     Optional<User> findByUsername(String username);
 
     public List<UserDto> findAll();

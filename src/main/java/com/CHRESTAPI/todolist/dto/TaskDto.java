@@ -2,7 +2,7 @@ package com.CHRESTAPI.todolist.dto;
 
 import com.CHRESTAPI.todolist.entities.Task;
 import com.CHRESTAPI.todolist.enums.TaskStatus;
-import com.CHRESTAPI.todolist.enums.priority;
+import com.CHRESTAPI.todolist.enums.Priority;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -26,7 +26,7 @@ public class TaskDto {
     private String name ;
     private String content;
     @Enumerated(EnumType.STRING)
-    private priority taskPriority;
+    private Priority taskPriority;
     @Enumerated(EnumType.STRING)
     private TaskStatus taskstatus;
     private LocalTime time;
