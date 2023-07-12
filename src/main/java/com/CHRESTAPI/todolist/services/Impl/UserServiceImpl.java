@@ -1,13 +1,16 @@
 package com.CHRESTAPI.todolist.services.Impl;
 
+import com.CHRESTAPI.todolist.dto.UserDto;
 import com.CHRESTAPI.todolist.entities.User;
 import com.CHRESTAPI.todolist.repositories.UserRepository;
 import com.CHRESTAPI.todolist.services.UserService;
+import com.CHRESTAPI.todolist.validators.UserValidator;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -26,34 +29,56 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public Optional<User> findByusernameOrEmail(String email, String username){
+        return userRepository.findByUsernameOrEmail(email, username);
+    }
+
+    @Override
+    public  Optional<User> findByEmail(String email){
+        return userRepository.findByEmail(email);
+    }
+
+    @Override
     public Optional<User> findByUsername(String username) {
         return userRepository.findByUsername(username);
     }
 
     @Override
-    public List<User> findAll() {
-        return userRepository.findAll();
+    public List<UserDto> findAll() {
+        return userRepository
+                .findAll()
+                .stream().map(UserDto::fromEntity).collect(Collectors.toList());
     }
 
     @Override
     public void createUser(User user) {
-       userRepository.save(user);
+        UserValidator.validate(user);
+        userRepository.save(user);
     }
 
     @Override
-    public void updateUser(User user) {
-        Optional<User> optionalUser = userRepository.findById(user.getId());
-        if (optionalUser.isPresent()) {
-            User existingUser = optionalUser.get();
-            existingUser.setUsername(user.getUsername());
-            existingUser.setPassword(user.getPassword());
-            existingUser.setEmail(user.getEmail());
-            existingUser.setFirstName(user.getFirstName());
-            existingUser.setLastName(user.getLastName());
-            userRepository.save(existingUser);
-        } else {
-            throw new EntityNotFoundException("User not found with ID: " + user.getId());
-        }
-
+    public UserDto save(UserDto userDto) {
+        User user = userDto.toEntity(userDto); // Convert UserDto to User entity
+        User savedUser = userRepository.save(user);
+        UserDto savedUserDto = UserDto.fromEntity(savedUser); // Convert User entity to UserDto
+        return savedUserDto;
     }
+
+    @Override
+    public UserDto updateUser(UserDto userDto) {
+
+        User existingUser = userRepository.findById(userDto.getId())
+                .orElseThrow(() -> new EntityNotFoundException("User not found with ID: " + userDto.getId()));
+
+        existingUser.setUsername(userDto.getUsername());
+        existingUser.setPassword(userDto.getPassword());
+        existingUser.setEmail(userDto.getEmail());
+        existingUser.setFirstName(userDto.getFirstName());
+        existingUser.setLastName(userDto.getLastName());
+
+        User updatedUser = userRepository.save(existingUser);
+        return UserDto.fromEntity(updatedUser);
+    }
+
+
 }

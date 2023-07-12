@@ -1,13 +1,14 @@
 package com.CHRESTAPI.todolist.repositories;
 
 import com.CHRESTAPI.todolist.entities.Task;
-import com.CHRESTAPI.todolist.enums.priority;
+import com.CHRESTAPI.todolist.enums.Priority;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 
@@ -16,15 +17,17 @@ public interface TaskRepository extends JpaRepository<Task,Long> {
 
     List<Task> findByTaskList(String taskList);
 
-    List<Task> findByTaskstatus(String status);
+    Optional<Task> findByTaskstatus(String status);
 
     List<Task> findByDate(LocalDate date);
 
     List<Task> findByDateTimeReminderBetween(LocalDateTime start, LocalDateTime end);
 
-    List<Task> findByTaskPriority(priority priority);
+    List<Task> findByTaskPriority(Priority priority);
 
     List<Task> findByCategory(String category);
 
     List<Task> findByTagsIn(Set<String> tags);
+
+    Task save(Task task);
 }
