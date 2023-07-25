@@ -6,7 +6,7 @@ import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 import java.util.Set;
 
-public class UserValidator {
+public class  UserValidator {
     private static final ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
     private static final Validator validator = factory.getValidator();
 

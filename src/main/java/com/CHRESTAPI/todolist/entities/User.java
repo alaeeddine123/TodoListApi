@@ -62,7 +62,7 @@ import java.util.List;
 
     @Override
     public String getUsername() {
-        return email;
+        return username;
     }
 
     @Override
