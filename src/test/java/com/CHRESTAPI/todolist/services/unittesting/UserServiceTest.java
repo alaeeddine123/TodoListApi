@@ -7,9 +7,10 @@ import com.CHRESTAPI.todolist.repositories.UserRepository;
 import com.CHRESTAPI.todolist.services.Impl.UserServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.mockito.BDDMockito.then;
-import static org.mockito.BDDMockito.willReturn;
 
 import java.util.Arrays;
 import java.util.List;
@@ -49,6 +50,16 @@ public class UserServiceTest {
      }
 
      @Test
+     void itShouldCheckIfUserIsNotFoundById(){
+        //given
+        Long id = 1L;
+        //when
+        Optional<User> result = userService.finById(id);
+        //then
+        assertFalse(result.isPresent());
+     }
+
+     @Test
      void iTShouldCheckIfUserIsFoundByUsernameOrEmail(){
 
         //given
@@ -67,6 +78,16 @@ public class UserServiceTest {
          System.out.println("result get is : "+result.get());
          assertEquals(user,result.get());
 
+     }
+      @Test
+     void itShouldCheckIfUserIsNotFoundByUsernameOrEmail(){
+        //given
+          String  username = "Jhon";
+          String email = "Jhon@example.com";
+        //when
+        Optional<User> result = userService.findByusernameOrEmail(username,email);
+        //then
+        assertFalse(result.isPresent());
      }
 
         @Test
@@ -90,8 +111,21 @@ public class UserServiceTest {
 
      }
 
+     @Test
+     void iTShouldCheckIfUserIsNotFoundByEmail(){
+
+         //given
+         String email = "Jhon@example.com";
+        //when
+        Optional<User> result = userService.findByEmail(email);
+        //then
+        assertFalse(result.isPresent());
+
+     }
+
+
            @Test
-     void iTShouldCheckIfUserIsFoundByUsername(){
+      void iTShouldCheckIfUserIsFoundByUsername(){
 
         //given
         String  username = "Jhon";
@@ -107,6 +141,15 @@ public class UserServiceTest {
          //then
          System.out.println("result get is : "+result.get());
          assertEquals(user,result.get());
+
+     }
+     void iTShouldCheckIfUserIsNotFoundByUsername(){
+             //given
+          String  username = "Jhon";
+        //when
+        Optional<User> result = userService.findByUsername(username);
+        //then
+        assertFalse(result.isPresent());
 
      }
 
@@ -175,11 +218,41 @@ public class UserServiceTest {
         assertEquals(expected, result);
    }
 
-    /*
+   @Test void itShouldCheckIfUserIsSaved(){
+        User user = User.builder()
+                .id(1L)
+                .username("john_doe")
+                .password("password123")
+                .email("john@example.com")
+                .firstName("John")
+                .lastName("Doe")
+                .role(Role.USER)
+                .build();
+        // Create ArgumentCaptor to capture the User object passed to userRepository.save()
+    ArgumentCaptor<User> userCaptor = ArgumentCaptor.forClass(User.class);
 
-    public List<UserDto> findAll();
-    void createUser(User user);
-    UserDto save(UserDto userDto);
-    UserDto updateUser(UserDto userDto);*/
+    // Mock the userRepository.save() method and capture the argument
+    when(userRepository.save(userCaptor.capture())).thenReturn(user);
+
+    // Call the service method
+    userService.save(UserDto.fromEntity(user));
+
+    // Verify the userRepository.save() method was called with the correct User object
+    verify(userRepository).save(userCaptor.capture());
+    User capturedUser = userCaptor.getValue();
+
+    // Assert the capturedUser object without comparing the password field
+        assertEquals(user.getUsername(), capturedUser.getUsername());
+        assertEquals(user.getEmail(), capturedUser.getEmail());
+        assertEquals(user.getFirstName(), capturedUser.getFirstName());
+        assertEquals(user.getLastName(), capturedUser.getLastName());
+        assertEquals(user.getRole(), capturedUser.getRole());
+
+    // Verify that no other interactions occurred with userRepository
+    verifyNoMoreInteractions(userRepository);
+
+   }
+
+
 }
 
