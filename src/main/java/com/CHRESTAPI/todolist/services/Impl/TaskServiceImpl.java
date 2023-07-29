@@ -1,7 +1,9 @@
 package com.CHRESTAPI.todolist.services.Impl;
 
 import com.CHRESTAPI.todolist.entities.Task;
+import com.CHRESTAPI.todolist.entities.TodoList;
 import com.CHRESTAPI.todolist.enums.Priority;
+import com.CHRESTAPI.todolist.enums.TaskStatus;
 import com.CHRESTAPI.todolist.exception.ElementNotFoundException;
 import com.CHRESTAPI.todolist.repositories.TaskRepository;
 import com.CHRESTAPI.todolist.services.TaskService;
@@ -38,20 +40,20 @@ public class TaskServiceImpl  implements TaskService {
     }
 
     @Override
-    public List<Task> findByTaskList(String taskList) {
-        if(taskList == null || taskList.isEmpty()){
+    public Optional<Task> findByTaskList(TodoList taskList) {
+        if(taskList == null ){
             throw   new IllegalArgumentException("Task list null or empty");
         }
         return taskRepository.findByTaskList(taskList);
     }
 
     @Override
-    public Optional<Task> findByTaskstatus(String status) {
+    public Optional<Task> findByTaskstatus(TaskStatus status) {
         return taskRepository.findByTaskstatus(status);
     }
 
     @Override
-    public List<Task> findByDate(LocalDate date) {
+    public Optional<Task> findByDate(LocalDate date) {
         return taskRepository.findByDate(date);
     }
 

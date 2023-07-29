@@ -1,4 +1,4 @@
-package com.CHRESTAPI.todolist.services.unittesting;
+package com.CHRESTAPI.todolist.services;
 
 import com.CHRESTAPI.todolist.entities.Task;
 import com.CHRESTAPI.todolist.repositories.TaskRepository;

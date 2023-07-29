@@ -4,6 +4,7 @@ package com.CHRESTAPI.todolist.controllers;
 import com.CHRESTAPI.todolist.dto.TaskDto;
 import com.CHRESTAPI.todolist.entities.Task;
 import com.CHRESTAPI.todolist.enums.Priority;
+import com.CHRESTAPI.todolist.enums.TaskStatus;
 import com.CHRESTAPI.todolist.errors.ErrorResponse;
 import com.CHRESTAPI.todolist.exception.ElementNotFoundException;
 import com.CHRESTAPI.todolist.services.TaskService;
@@ -38,7 +39,7 @@ public class TaskController {
     }
 
     @GetMapping("/findbytaskstatus/{status}")
-    public Optional<Task> findByTaskStatus(@PathVariable String status) {
+    public Optional<Task> findByTaskStatus(@PathVariable TaskStatus status) {
 
         try {
             return taskService.findByTaskstatus(status);
@@ -48,7 +49,7 @@ public class TaskController {
     }
 
     @GetMapping("/findbydate/{date}")
-    public List<Task> findByDate(@PathVariable LocalDate date) {
+    public Optional<Task> findByDate(@PathVariable LocalDate date) {
         try {
             return taskService.findByDate(date);
         } catch (ElementNotFoundException e) {

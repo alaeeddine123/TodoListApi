@@ -1,7 +1,9 @@
 package com.CHRESTAPI.todolist.services;
 
 import com.CHRESTAPI.todolist.entities.Task;
+import com.CHRESTAPI.todolist.entities.TodoList;
 import com.CHRESTAPI.todolist.enums.Priority;
+import com.CHRESTAPI.todolist.enums.TaskStatus;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -16,11 +18,11 @@ public interface TaskService {
 
     Optional<Task> finByTaskId(Long id);
 
-    List<Task> findByTaskList(String taskList);
+    Optional<Task> findByTaskList(TodoList taskList);
 
-    Optional <Task> findByTaskstatus(String status);
+    Optional <Task> findByTaskstatus(TaskStatus status);
 
-    List<Task> findByDate(LocalDate date);
+    Optional<Task> findByDate(LocalDate date);
 
     List<Task> findByDateTimeReminderBetween(LocalDateTime start, LocalDateTime end);
 

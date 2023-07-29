@@ -4,6 +4,7 @@ package com.CHRESTAPI.todolist.entities;
 import com.CHRESTAPI.todolist.enums.TaskStatus;
 import com.CHRESTAPI.todolist.enums.Priority;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -17,6 +18,7 @@ import java.util.Set;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 
 public class Task {
     @Id
@@ -35,7 +37,7 @@ public class Task {
     private Set<String> tags;
     private LocalDateTime dateTimeReminder;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     private TodoList taskList;
 
 }

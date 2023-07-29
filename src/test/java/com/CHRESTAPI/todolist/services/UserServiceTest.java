@@ -1,4 +1,4 @@
-package com.CHRESTAPI.todolist.services.unittesting;
+package com.CHRESTAPI.todolist.services;
 
 import com.CHRESTAPI.todolist.dto.UserDto;
 import com.CHRESTAPI.todolist.entities.User;
@@ -9,7 +9,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.then;
 
 import java.util.Arrays;
@@ -17,7 +17,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 public class UserServiceTest {
@@ -155,7 +154,7 @@ public class UserServiceTest {
 
 
       @Test
-    void testCreateUser_ValidUser_CallsSaveMethod() {
+      void iTShouldCheckIfUserIsCreated() {
         // given
         User user = User.builder()
                 .id(1L)
@@ -175,6 +174,31 @@ public class UserServiceTest {
         verify(userRepository).save(user);
         verifyNoMoreInteractions(userRepository);
     }
+
+    @Test
+    void iTShouldCheckIfUserIsNotCreated() {
+        // given
+        User user = User.builder()
+            .id(1L)
+            .username("john_doe")
+            .password("password123")
+            .email("john@example.com")
+            .firstName("John")
+            .lastName("Doe")
+            .role(Role.USER)
+            .build();
+
+        // Simulate a failure during user creation by returning null when userRepository.save() is called
+        when(userRepository.save(user)).thenReturn(null);
+
+        // when
+        userService.createUser(user);
+
+        // then
+        // Verify that userRepository.save() was called once with the user object
+        verify(userRepository, times(1)).save(user);
+        verifyNoMoreInteractions(userRepository);
+}
 
    @Test
     void itShouldFindAllUsers(){
