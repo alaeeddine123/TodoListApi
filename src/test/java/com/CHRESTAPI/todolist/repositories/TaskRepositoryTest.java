@@ -31,16 +31,14 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @SpringBootTest
 @ExtendWith(SpringExtension.class)
 @TestPropertySource(locations = "classpath:application-test.properties")
+@Transactional
 public class TaskRepositoryTest {
-
-
 
     @Autowired
     private   TaskRepository taskRepository;
 
     @Autowired
     private  TodoListRepository todoListRepository;
-
 
     @Autowired
     private UserRepository userRepository;
@@ -50,9 +48,7 @@ public class TaskRepositoryTest {
         taskRepository.deleteAll();
     }
 
-
     @Test
-      @Transactional
     void itShouldCheckIfTaskIsFoundByTaskList() {
          //given
 
@@ -96,7 +92,6 @@ public class TaskRepositoryTest {
 
     }
     @Test
-    @Transactional
         void itShouldCheckIfTaskIsFoundByTaskStatus() {
 
     // given
@@ -131,7 +126,6 @@ public class TaskRepositoryTest {
     }
 
     @Test
-    @Transactional
         void itShouldCheckIfTaskIsFoundByDate() {
 
     // given
@@ -166,7 +160,6 @@ public class TaskRepositoryTest {
     }
 
     @Test
-    @Transactional
         void itShouldCheckIfTaskIsFoundByDateTimeReminderBetween() {
 
     // given
@@ -202,7 +195,6 @@ public class TaskRepositoryTest {
     }
 
     @Test
-    @Transactional
         void itShouldCheckIfTaskIsFoundByTaskPriority() {
 
     // given
@@ -232,8 +224,7 @@ public class TaskRepositoryTest {
      assertEquals(Optional.of(task), result);
 
     }
-     @Test
-    @Transactional
+    @Test
         void itShouldCheckIfTaskIsFoundByTaskCategory() {
 
          // given
@@ -258,8 +249,7 @@ public class TaskRepositoryTest {
          Optional<Task> result = taskRepository.findByCategory(taskCategory);
      }
 
-          @Test
-    @Transactional
+    @Test
         void itShouldCheckIfTaskIsFoundByTagsIn() {
 
          // given
@@ -283,16 +273,6 @@ public class TaskRepositoryTest {
          // Find the task by the task status
          Optional<Task> result = taskRepository.findByTagsIn(taskTags);
      }
-
-
-
-
-
-  /*
-    List<Task> findByTagsIn(Set<String> tags);
-    Task save(Task task);
-   */
-
 
 
     }
