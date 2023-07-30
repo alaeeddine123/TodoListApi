@@ -130,7 +130,7 @@ public class TaskRepositoryTest {
 
     }
 
-      @Test
+    @Test
     @Transactional
         void itShouldCheckIfTaskIsFoundByDate() {
 
@@ -165,15 +165,130 @@ public class TaskRepositoryTest {
 
     }
 
+    @Test
+    @Transactional
+        void itShouldCheckIfTaskIsFoundByDateTimeReminderBetween() {
+
+    // given
+          LocalDateTime startDate = LocalDateTime.of(2023, 7, 28, 9, 0);
+          LocalDateTime endDate = LocalDateTime.of(2023, 7, 30, 9, 0);
+
+
+    TodoList todoList = new TodoList();
+    todoListRepository.save(todoList);
+
+    // Create and save a Task entity with the desired task status
+    Task task = Task.builder()
+            .name("task1")
+            .content("task 1 content")
+            .taskPriority(Priority.HIGH)
+            .time(LocalTime.of(12, 30))
+            .date(LocalDate.of(2023, 7, 27))
+            .category("category 1")
+            .tags(Set.of("tag1", "tag2", "tag3"))
+            .dateTimeReminder(LocalDateTime.of(2023, 7, 28, 9, 0))
+            .build();
+
+           taskRepository.save(task);
+
+    // when
+    // Find the task by the task status
+    Optional<Task> result = taskRepository.findByDateTimeReminderBetween(startDate,endDate);
+
+    // then
+    // Assert that the result contains the task you saved
+     assertEquals(Optional.of(task), result);
+
+    }
+
+    @Test
+    @Transactional
+        void itShouldCheckIfTaskIsFoundByTaskPriority() {
+
+    // given
+         Priority taskpriority = Priority.LOW;
+
+
+    // Create and save a Task entity with the desired task status
+    Task task = Task.builder()
+            .name("task1")
+            .content("task 1 content")
+            .taskPriority(Priority.LOW)
+            .time(LocalTime.of(12, 30))
+            .date(LocalDate.of(2023, 7, 27))
+            .category("category 1")
+            .tags(Set.of("tag1", "tag2", "tag3"))
+            .dateTimeReminder(LocalDateTime.of(2023, 7, 28, 9, 0))
+            .build();
+
+           taskRepository.save(task);
+
+    // when
+    // Find the task by the task status
+    Optional<Task> result = taskRepository.findByTaskPriority(taskpriority);
+
+    // then
+    // Assert that the result contains the task you saved
+     assertEquals(Optional.of(task), result);
+
+    }
+     @Test
+    @Transactional
+        void itShouldCheckIfTaskIsFoundByTaskCategory() {
+
+         // given
+         String taskCategory = "Category1";
+
+         // Create and save a Task entity with the desired task status
+         Task task = Task.builder()
+                 .name("task1")
+                 .content("task 1 content")
+                 .taskPriority(Priority.LOW)
+                 .time(LocalTime.of(12, 30))
+                 .date(LocalDate.of(2023, 7, 27))
+                 .category("category 1")
+                 .tags(Set.of("tag1", "tag2", "tag3"))
+                 .dateTimeReminder(LocalDateTime.of(2023, 7, 28, 9, 0))
+                 .build();
+
+         taskRepository.save(task);
+
+         // when
+         // Find the task by the task status
+         Optional<Task> result = taskRepository.findByCategory(taskCategory);
+     }
+
+          @Test
+    @Transactional
+        void itShouldCheckIfTaskIsFoundByTagsIn() {
+
+         // given
+         Set<String> taskTags = Set.of("tag1", "tag2", "tag3");
+
+         // Create and save a Task entity with the desired task status
+         Task task = Task.builder()
+                 .name("task1")
+                 .content("task 1 content")
+                 .taskPriority(Priority.LOW)
+                 .time(LocalTime.of(12, 30))
+                 .date(LocalDate.of(2023, 7, 27))
+                 .category("category 1")
+                 .tags(Set.of("tag1", "tag2", "tag3"))
+                 .dateTimeReminder(LocalDateTime.of(2023, 7, 28, 9, 0))
+                 .build();
+
+         taskRepository.save(task);
+
+         // when
+         // Find the task by the task status
+         Optional<Task> result = taskRepository.findByTagsIn(taskTags);
+     }
+
 
 
 
 
   /*
-    List<Task> findByDate(LocalDate date);
-    List<Task> findByDateTimeReminderBetween(LocalDateTime start, LocalDateTime end);
-    List<Task> findByTaskPriority(Priority priority);
-    List<Task> findByCategory(String category);
     List<Task> findByTagsIn(Set<String> tags);
     Task save(Task task);
    */

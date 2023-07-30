@@ -24,13 +24,13 @@ public interface TaskService {
 
     Optional<Task> findByDate(LocalDate date);
 
-    List<Task> findByDateTimeReminderBetween(LocalDateTime start, LocalDateTime end);
+    Optional<Task> findByDateTimeReminderBetween(LocalDateTime start, LocalDateTime end);
 
-    List<Task> findByTaskPriority(Priority priority);
+    Optional<Task> findByTaskPriority(Priority priority);
 
-    List<Task> findByCategory(String category);
+    Optional<Task> findByCategory(String category);
 
-    List<Task> findByTagsIn(Set<String> tags);
+    Optional<Task> findByTagsIn(Set<String> tags);
 
     Task save(Task task);
 }

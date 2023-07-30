@@ -58,9 +58,9 @@ public class TaskController {
     }
 
     @GetMapping("/findbydatetimereminderbetween/{start}/{end}")
-    public List<Task> finByDateTimeReminderBetween(@PathVariable LocalDateTime start, LocalDateTime end) {
+    public Optional<Task> finByDateTimeReminderBetween(@PathVariable LocalDateTime start, LocalDateTime end) {
         try {
-            List<Task> tasks = taskService.findByDateTimeReminderBetween(start, end);
+            Optional<Task> tasks = taskService.findByDateTimeReminderBetween(start, end);
             if (tasks.isEmpty()) {
                 throw new ElementNotFoundException("Element not found");
             }
@@ -75,9 +75,9 @@ public class TaskController {
     }
 
     @GetMapping("/findbytaskpriority/{priority}")
-    public List<Task> findByTaskPriority(@PathVariable Priority priority) {
+    public Optional<Task> findByTaskPriority(@PathVariable Priority priority) {
         try {
-            List<Task> tasks = taskService.findByTaskPriority(priority);
+            Optional<Task> tasks = taskService.findByTaskPriority(priority);
             if (tasks.isEmpty()) {
                 throw new ElementNotFoundException("Element not found");
             }
@@ -87,9 +87,9 @@ public class TaskController {
         }
     }
     @GetMapping("/findbycategory/{category}")
-    public List<Task> findbycategory(@PathVariable String category){
+    public Optional<Task> findbycategory(@PathVariable String category){
         try{
-            List<Task> tasks = taskService.findByCategory(category);
+            Optional<Task> tasks = taskService.findByCategory(category);
             if (tasks.isEmpty()){
                 throw  new ElementNotFoundException("element not found");
             }
@@ -100,9 +100,9 @@ public class TaskController {
     }
 
     @GetMapping("/findbytagsin")
-    public List<Task> findByTagsIn(@PathVariable Set<String> tags){
+    public Optional<Task> findByTagsIn(@PathVariable Set<String> tags){
         try{
-            List<Task> tasks = taskService.findByTagsIn(tags);
+            Optional<Task> tasks = taskService.findByTagsIn(tags);
             if (tasks.isEmpty()) throw new ElementNotFoundException("element not found");
             return tasks;
         }catch (ElementNotFoundException e){

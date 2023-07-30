@@ -58,22 +58,22 @@ public class TaskServiceImpl  implements TaskService {
     }
 
     @Override
-    public List<Task> findByDateTimeReminderBetween(LocalDateTime start, LocalDateTime end) {
+    public Optional<Task> findByDateTimeReminderBetween(LocalDateTime start, LocalDateTime end) {
         return  taskRepository.findByDateTimeReminderBetween(start,end);
     }
 
     @Override
-    public List<Task> findByTaskPriority(Priority priority) {
+    public Optional<Task> findByTaskPriority(Priority priority) {
         return taskRepository.findByTaskPriority(priority);
     }
 
     @Override
-    public List<Task> findByCategory(String category) {
+    public Optional<Task> findByCategory(String category) {
         return taskRepository.findByCategory(category);
     }
 
     @Override
-    public List<Task> findByTagsIn(Set<String> tags) {
+    public Optional<Task> findByTagsIn(Set<String> tags) {
         return taskRepository.findByTagsIn(tags);
     }
 
