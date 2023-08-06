@@ -210,7 +210,23 @@ public class TaskRepositoryTest {
      assertEquals(Optional.of(task), result);
      }
 
-    @Test
+
+        @Test
+    void itShouldCheckIfTaskIsNotFoundByDate(){
+
+         // given
+          LocalDate taskDate = LocalDate.of(2023, 7, 27);
+
+        // when
+       // Find the task by the task date
+        Optional<Task> result = taskRepository.findByDate(taskDate);
+
+        //then
+        assertFalse(result.isPresent());
+    }
+
+
+     @Test
      @Transactional
         void itShouldCheckIfTaskIsFoundByDateTimeReminderBetween() {
 
@@ -246,6 +262,24 @@ public class TaskRepositoryTest {
 
     }
 
+
+     void itShouldCheckIfTaskIsNotFoundByDateTimeReminderBetween(){
+
+         // given
+          LocalDateTime startDate = LocalDateTime.of(2023, 7, 28, 9, 0);
+          LocalDateTime endDate = LocalDateTime.of(2023, 7, 30, 9, 0);
+
+
+        // when
+       // Find the task by the task date
+        Optional<Task> result = taskRepository.findByDateTimeReminderBetween(startDate,endDate);
+
+        //then
+        assertFalse(result.isPresent());
+    }
+
+
+
     @Test
      @Transactional
         void itShouldCheckIfTaskIsFoundByTaskPriority() {
@@ -277,6 +311,22 @@ public class TaskRepositoryTest {
      assertEquals(Optional.of(task), result);
 
     }
+
+            @Test
+    void itShouldCheckIfTaskIsNotFoundByTaskPriority(){
+
+         // given
+          Priority taskpriority = Priority.LOW;
+
+        // when
+       // Find the task by the task date
+        Optional<Task> result = taskRepository.findByTaskPriority(taskpriority);
+
+        //then
+        assertFalse(result.isPresent());
+    }
+
+
     @Test
         void itShouldCheckIfTaskIsFoundByTaskCategory() {
 
@@ -302,6 +352,21 @@ public class TaskRepositoryTest {
          Optional<Task> result = taskRepository.findByCategory(taskCategory);
      }
 
+
+     @Test
+    void itShouldCheckIfTaskIsNotFoundByTaskCategory(){
+
+         // given
+               String taskCategory = "Category1";
+
+        // when
+       // Find the task by the task date
+        Optional<Task> result = taskRepository.findByCategory(taskCategory);
+
+        //then
+        assertFalse(result.isPresent());
+    }
+
     @Test
         void itShouldCheckIfTaskIsFoundByTagsIn() {
 
@@ -325,6 +390,20 @@ public class TaskRepositoryTest {
          // when
          // Find the task by the task status
          Optional<Task> result = taskRepository.findByTagsIn(taskTags);
+     }
+
+
+     @Test
+    void iTShouldCheckIfTaskIsNotFoundByTagsIn(){
+
+         // given
+         Set<String> taskTags = Set.of("tag1", "tag2", "tag3");
+
+         //when
+          Optional<Task> result = taskRepository.findByTagsIn(taskTags);
+
+          //then
+           assertFalse(result.isPresent());
      }
 
 
