@@ -132,7 +132,7 @@ class UserRepositoryTest {
     }
 
     @Test
-    void itShouldCheckIfUserIsFoundByUsername() {
+    void itShouldCheckIfUserIsFoundByUsername()  {
         //given
 
         String username = "john_doe3";

@@ -9,29 +9,29 @@ import com.CHRESTAPI.todolist.enums.TaskStatus;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.runner.RunWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 
-@SpringBootTest
+@DataJpaTest
 @ExtendWith(SpringExtension.class)
 @TestPropertySource(locations = "classpath:application-test.properties")
-@Transactional
+
 public class TaskRepositoryTest {
 
     @Autowired
@@ -48,6 +48,8 @@ public class TaskRepositoryTest {
         taskRepository.deleteAll();
     }
 
+
+    @Transactional
     @Test
     void itShouldCheckIfTaskIsFoundByTaskList() {
          //given
@@ -55,7 +57,7 @@ public class TaskRepositoryTest {
          User user = User.builder()
                 .username("john_doe3")
                 .password("password123")
-                .email("john2@example.com")
+                .email("john1@example.com")
                 .firstName("John")
                 .lastName("Doe")
                 .role(Role.USER)
@@ -89,10 +91,43 @@ public class TaskRepositoryTest {
         Optional<Task> result = taskRepository.findByTaskList(todoList);
         //then
         assertEquals(Optional.of(task),result);
+        // Using SLF4J to log the expected and actual results
+    Logger logger = LoggerFactory.getLogger(TaskRepositoryTest.class);
+    logger.info("Expected Result: {}", Optional.of(task));
+    logger.info("Actual Result: {}", result);
+}
 
-    }
+
     @Test
-        void itShouldCheckIfTaskIsFoundByTaskStatus() {
+    @Transactional
+    void itShouldCheckIfTaskIsNotFoundBytaskList(){
+        //given
+        User user = User.builder()
+                .username("john_doe3")
+                .password("password123")
+                .email("john3@example.com")
+                .firstName("John")
+                .lastName("Doe")
+                .role(Role.USER)
+                .build();
+         userRepository.save(user);
+
+          TodoList todoList = TodoList.builder()
+                  .name("todoList1")
+                  .createdDate(LocalDate.of(2023, 7, 27))
+                  .user(user).build();
+
+           todoListRepository.save(todoList);
+
+        //when
+        Optional<Task> result = taskRepository.findByTaskList(todoList);
+        //then
+        assertFalse(result.isPresent());
+    }
+
+    @Test
+    @Transactional
+    void itShouldCheckIfTaskIsFoundByTaskStatus() {
 
     // given
     TaskStatus taskStatus = TaskStatus.IN_PROGRESS;
@@ -126,6 +161,23 @@ public class TaskRepositoryTest {
     }
 
     @Test
+    void itShouldCheckIfTaskIsNotFoundByTaskStatus(){
+
+          TaskStatus taskStatus = TaskStatus.IN_PROGRESS;
+
+        // when
+       // Find the task by the task status
+        Optional<Task> result = taskRepository.findByTaskstatus(taskStatus);
+
+        //then
+        assertFalse(result.isPresent());
+
+
+
+    }
+
+    @Test
+     @Transactional
         void itShouldCheckIfTaskIsFoundByDate() {
 
     // given
@@ -156,10 +208,10 @@ public class TaskRepositoryTest {
     // then
     // Assert that the result contains the task you saved
      assertEquals(Optional.of(task), result);
-
-    }
+     }
 
     @Test
+     @Transactional
         void itShouldCheckIfTaskIsFoundByDateTimeReminderBetween() {
 
     // given
@@ -195,6 +247,7 @@ public class TaskRepositoryTest {
     }
 
     @Test
+     @Transactional
         void itShouldCheckIfTaskIsFoundByTaskPriority() {
 
     // given
