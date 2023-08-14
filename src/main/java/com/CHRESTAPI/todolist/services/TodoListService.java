@@ -12,7 +12,7 @@ public interface TodoListService {
 
     public Optional<TodoList> findListById(Long id) ;
 
-    public Optional<List> findListByName(String name) ;
+    public Optional<TodoList> findListByName(String name) ;
 
     public List<TodoList> findAll();
 }

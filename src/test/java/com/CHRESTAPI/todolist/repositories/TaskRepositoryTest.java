@@ -48,7 +48,6 @@ public class TaskRepositoryTest {
         taskRepository.deleteAll();
     }
 
-
     @Transactional
     @Test
     void itShouldCheckIfTaskIsFoundByTaskList() {
@@ -96,7 +95,6 @@ public class TaskRepositoryTest {
     logger.info("Expected Result: {}", Optional.of(task));
     logger.info("Actual Result: {}", result);
 }
-
 
     @Test
     @Transactional
@@ -210,7 +208,6 @@ public class TaskRepositoryTest {
      assertEquals(Optional.of(task), result);
      }
 
-
         @Test
     void itShouldCheckIfTaskIsNotFoundByDate(){
 
@@ -224,7 +221,6 @@ public class TaskRepositoryTest {
         //then
         assertFalse(result.isPresent());
     }
-
 
      @Test
      @Transactional
@@ -262,7 +258,8 @@ public class TaskRepositoryTest {
 
     }
 
-
+     @Test
+     @Transactional
      void itShouldCheckIfTaskIsNotFoundByDateTimeReminderBetween(){
 
          // given
@@ -277,8 +274,6 @@ public class TaskRepositoryTest {
         //then
         assertFalse(result.isPresent());
     }
-
-
 
     @Test
      @Transactional
@@ -312,7 +307,7 @@ public class TaskRepositoryTest {
 
     }
 
-            @Test
+     @Test
     void itShouldCheckIfTaskIsNotFoundByTaskPriority(){
 
          // given
@@ -325,7 +320,6 @@ public class TaskRepositoryTest {
         //then
         assertFalse(result.isPresent());
     }
-
 
     @Test
         void itShouldCheckIfTaskIsFoundByTaskCategory() {
@@ -351,7 +345,6 @@ public class TaskRepositoryTest {
          // Find the task by the task status
          Optional<Task> result = taskRepository.findByCategory(taskCategory);
      }
-
 
      @Test
     void itShouldCheckIfTaskIsNotFoundByTaskCategory(){
@@ -391,7 +384,6 @@ public class TaskRepositoryTest {
          // Find the task by the task status
          Optional<Task> result = taskRepository.findByTagsIn(taskTags);
      }
-
 
      @Test
     void iTShouldCheckIfTaskIsNotFoundByTagsIn(){

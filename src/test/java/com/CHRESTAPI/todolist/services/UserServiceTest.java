@@ -122,7 +122,6 @@ public class UserServiceTest {
 
      }
 
-
            @Test
       void iTShouldCheckIfUserIsFoundByUsername(){
 
@@ -142,6 +141,7 @@ public class UserServiceTest {
          assertEquals(user,result.get());
 
      }
+     @Test
      void iTShouldCheckIfUserIsNotFoundByUsername(){
              //given
           String  username = "Jhon";
@@ -151,7 +151,6 @@ public class UserServiceTest {
         assertFalse(result.isPresent());
 
      }
-
 
       @Test
       void iTShouldCheckIfUserIsCreated() {

@@ -24,7 +24,7 @@ public class TodoListServiceImpl implements TodoListService {
     }
 
     @Override
-    public Optional<List> findListByName(String name) {
+    public Optional<TodoList> findListByName(String name) {
         return todoListRepository.findListByName(name) ;
     }
 
