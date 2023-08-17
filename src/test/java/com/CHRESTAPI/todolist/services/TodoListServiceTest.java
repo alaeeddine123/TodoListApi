@@ -11,6 +11,7 @@ import java.time.LocalDate;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -47,6 +48,18 @@ public class TodoListServiceTest {
 
     }
 
+     @Test
+    void    itShouldCheckIfUserIsNotfoundByName() {
+
+           //given
+          String taskName = "Task1";
+
+        //when
+        Optional<TodoList> result = todoListService.findListByName(taskName);
+        //then
+        assertFalse(result.isPresent());
+    }
+
     @Test
     void ItShouldCheckIfUserIsFoundById(){
           //given
@@ -62,6 +75,19 @@ public class TodoListServiceTest {
         System.out.println("result = "+result);
         //then
         assertEquals(todoList,result.get());
+
+    }
+
+    @Test
+    void ItShouldCheckIfUserIsNotFoundById(){
+          //given
+        Long id = 1l;
+
+        //when
+        Optional<TodoList> result  = todoListService.findListById(id);
+
+        //then
+        assertFalse(result.isPresent());
 
     }
     @Test
