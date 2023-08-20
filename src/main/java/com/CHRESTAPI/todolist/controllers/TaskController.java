@@ -13,12 +13,15 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+
+import static org.apache.logging.log4j.ThreadContext.isEmpty;
 
 @RestController
 @Slf4j
@@ -39,48 +42,48 @@ public class TaskController {
     }
 
     @GetMapping("/findbytaskstatus/{status}")
-    public Optional<Task> findByTaskStatus(@PathVariable TaskStatus status) {
+    public ResponseEntity<Task> findByTaskStatus(@PathVariable TaskStatus status) {
 
         try {
-            return taskService.findByTaskstatus(status);
+            return taskService.findByTaskstatus(status)
+                    .map(ResponseEntity::ok)
+                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Task with status"+status+" -> not Found" ));
         } catch (ElementNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
         }
     }
 
     @GetMapping("/findbydate/{date}")
-    public Optional<Task> findByDate(@PathVariable LocalDate date) {
+    public ResponseEntity<Task> findByDate(@PathVariable LocalDate date) {
         try {
-            return taskService.findByDate(date);
+            return taskService.findByDate(date).map(ResponseEntity::ok).orElseThrow(
+                    () -> new ResponseStatusException(HttpStatus.NOT_FOUND,"Task nout found  : "));
         } catch (ElementNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
         }
     }
 
     @GetMapping("/findbydatetimereminderbetween/{start}/{end}")
-    public Optional<Task> finByDateTimeReminderBetween(@PathVariable LocalDateTime start, LocalDateTime end) {
+    public ResponseEntity<Task> finByDateTimeReminderBetween(@PathVariable LocalDateTime start, LocalDateTime end) {
         try {
-            Optional<Task> tasks = taskService.findByDateTimeReminderBetween(start, end);
-            if (tasks.isEmpty()) {
-                throw new ElementNotFoundException("Element not found");
-            }
+            ResponseEntity<Task> tasks = taskService.findByDateTimeReminderBetween(start, end).map(ResponseEntity::ok)
+                    .orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,"Task not found"));
             return tasks;
-        } catch (ElementNotFoundException e) {
+        } catch (ResponseStatusException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
         } catch (IllegalArgumentException e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid arguments", e);
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
         } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Internal server error", e);
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage(), e);
         }
     }
 
     @GetMapping("/findbytaskpriority/{priority}")
-    public Optional<Task> findByTaskPriority(@PathVariable Priority priority) {
+    public ResponseEntity<Task> findByTaskPriority(@PathVariable Priority priority) {
         try {
-            Optional<Task> tasks = taskService.findByTaskPriority(priority);
-            if (tasks.isEmpty()) {
-                throw new ElementNotFoundException("Element not found");
-            }
+            ResponseEntity<Task> tasks = taskService.findByTaskPriority(priority).map(
+                    ResponseEntity::ok).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND));
+
         return tasks;
         } catch (ElementNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
