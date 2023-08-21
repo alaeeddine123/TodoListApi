@@ -90,12 +90,12 @@ public class TaskController {
         }
     }
     @GetMapping("/findbycategory/{category}")
-    public Optional<Task> findbycategory(@PathVariable String category){
+    public ResponseEntity<Task> findbycategory(@PathVariable String category){
         try{
-            Optional<Task> tasks = taskService.findByCategory(category);
-            if (tasks.isEmpty()){
-                throw  new ElementNotFoundException("element not found");
-            }
+            ResponseEntity<Task> tasks = taskService.findByCategory(category).map(ResponseEntity::ok)
+                    .orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+
             return tasks;
         }catch (ElementNotFoundException e){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND,e.getMessage(),e);
