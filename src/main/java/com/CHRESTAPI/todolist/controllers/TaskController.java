@@ -90,7 +90,7 @@ public class TaskController {
         }
     }
     @GetMapping("/findbycategory/{category}")
-    public ResponseEntity<Task> findbycategory(@PathVariable String category){
+    public ResponseEntity<Task> findbycategory(@PathVariable String category)   {
         try{
             ResponseEntity<Task> tasks = taskService.findByCategory(category).map(ResponseEntity::ok)
                     .orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND));
@@ -103,10 +103,10 @@ public class TaskController {
     }
 
     @GetMapping("/findbytagsin")
-    public Optional<Task> findByTagsIn(@PathVariable Set<String> tags){
+    public ResponseEntity<Task> findByTagsIn(@PathVariable Set<String> tags){
         try{
-            Optional<Task> tasks = taskService.findByTagsIn(tags);
-            if (tasks.isEmpty()) throw new ElementNotFoundException("element not found");
+            ResponseEntity<Task> tasks = taskService.findByTagsIn(tags).map((ResponseEntity::ok)).orElseThrow(
+                    ()-> new ResponseStatusException(HttpStatus.NOT_FOUND));
             return tasks;
         }catch (ElementNotFoundException e){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(),e);

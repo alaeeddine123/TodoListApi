@@ -1,5 +1,6 @@
 package com.CHRESTAPI.todolist.controllers;
 
+import com.CHRESTAPI.todolist.dto.TaskDto;
 import com.CHRESTAPI.todolist.entities.Task;
 import com.CHRESTAPI.todolist.entities.TodoList;
 import com.CHRESTAPI.todolist.enums.TaskStatus;
@@ -30,16 +31,7 @@ class TaskControllerTest {
         private TaskService taskService;
         private TaskController taskController;
 
-        @BeforeEach
-        void setUp() {
-            taskService = mock(TaskService.class);
-            taskController = new TaskController(taskService);
-        }
-
-        @Test
-        void ItShouldCheckIfTaskIsFoundById() throws ElementNotFoundException {
-            // Arrange
-            Long taskId = 1L;
+        private Task createTask (){
             Task task = new Task() {{
                 setId(1L);
                 setName("Example Task");
@@ -53,6 +45,35 @@ class TaskControllerTest {
                 setDateTimeReminder(LocalDateTime.now());
                 setTaskList(new TodoList() {{ setName("Example TodoList"); }});
             }};
+            return task;
+        }
+
+        private TaskDto createDTotaskForIntegrationTest() {
+        return TaskDto.builder()
+                .id(1L)
+                .name("Integration Test Task")
+                .content("This is an integration test task")
+                .taskPriority(Priority.HIGH)
+                .taskstatus(TaskStatus.IN_PROGRESS)
+                .time(LocalTime.now())
+                .date(LocalDate.now())
+                .category("Integration Test Category")
+                .tags(new HashSet<>(Arrays.asList("tag1", "tag2")))
+                .dateTimeReminder(LocalDateTime.now().plusHours(1))
+                .build();
+    }
+
+        @BeforeEach
+        void setUp() {
+            taskService = mock(TaskService.class);
+            taskController = new TaskController(taskService);
+        }
+
+        @Test
+        void ItShouldCheckIfTaskIsFoundById() throws ElementNotFoundException {
+            // Arrange
+            Long taskId = 1L;
+            Task task = createTask();
 
             when(taskService.finByTaskId(taskId)).thenReturn(Optional.of(task));
 
@@ -83,19 +104,7 @@ class TaskControllerTest {
         void itShouldCheckIfTaskIsFoundByDate(){
             //given
             LocalDate taskDate = LocalDate.of(2023, 7, 27);
-            Task task = new Task() {{
-                setId(1L);
-                setName("Example Task");
-                setContent("This is an example task");
-                setTaskPriority(Priority.HIGH);
-                setTaskstatus(TaskStatus.IN_PROGRESS);
-                setTime(LocalTime.now());
-                setDate(LocalDate.now());
-                setCategory("Example Category");
-                setTags(new HashSet<>(Arrays.asList("tag1", "tag2", "tag3")));
-                setDateTimeReminder(LocalDateTime.now());
-                setTaskList(new TodoList() {{ setName("Example TodoList"); }});
-            }};
+            Task task = createTask();
             //when
             when(taskService.findByDate(taskDate)).thenReturn(Optional.of(task));
             Optional<ResponseEntity<Task>> result = Optional.ofNullable(taskController.findByDate(taskDate));
@@ -126,19 +135,8 @@ class TaskControllerTest {
             LocalDateTime startDate = LocalDateTime.of(2023, 6, 28, 9, 0);
             LocalDateTime endDate = LocalDateTime.of(2023, 7, 28, 9, 0);
 
-            Task task = new Task() {{
-                setId(1L);
-                setName("Example Task");
-                setContent("This is an example task");
-                setTaskPriority(Priority.HIGH);
-                setTaskstatus(TaskStatus.IN_PROGRESS);
-                setTime(LocalTime.now());
-                setDate(LocalDate.now());
-                setCategory("Example Category");
-                setTags(new HashSet<>(Arrays.asList("tag1", "tag2", "tag3")));
-                setDateTimeReminder(LocalDateTime.now());
-                setTaskList(new TodoList() {{ setName("Example TodoList"); }});
-            }};
+            Task task = createTask();
+
             //when
             when(taskService.findByDateTimeReminderBetween(startDate,endDate)).thenReturn(Optional.of(task));
             Optional<ResponseEntity<Task>> result = Optional.ofNullable(taskController.finByDateTimeReminderBetween(startDate,endDate));
@@ -173,9 +171,8 @@ class TaskControllerTest {
          void shouldFindByTaskStatusSuccessfully() throws ElementNotFoundException {
         // Given
         TaskStatus status = TaskStatus.IN_PROGRESS;
-        Task task = new Task();
-        task.setId(1L);
-        task.setTaskstatus(status);
+        Task task = createTask();
+
 
 
         // When
@@ -205,20 +202,9 @@ class TaskControllerTest {
         void itShouldTestIfTaskIsFoundByPriority() throws ResponseStatusException {
             // given
             Priority taskpriority = Priority.HIGH;
-              Task task = new Task() {{
-                setId(1L);
-                setName("Example Task");
-                setContent("This is an example task");
-                setTaskPriority(Priority.HIGH);
-                setTaskstatus(TaskStatus.IN_PROGRESS);
-                setTime(LocalTime.now());
-                setDate(LocalDate.now());
-                setCategory("Example Category");
-                setTags(new HashSet<>(Arrays.asList("tag1", "tag2", "tag3")));
-                setDateTimeReminder(LocalDateTime.now());
-                setTaskList(new TodoList() {{ setName("Example TodoList"); }});
-            }};
-        //when
+            Task task = createTask();
+
+           //when
             when(taskService.findByTaskPriority(taskpriority)).thenReturn(Optional.ofNullable(task));
             Optional<ResponseEntity<Task>> result =  Optional.ofNullable(taskController.findByTaskPriority(taskpriority));
 
@@ -247,29 +233,83 @@ class TaskControllerTest {
 
             //given
             String category = "category1";
+            Task task = createTask();
 
-                   Task task = new Task() {{
-                setId(1L);
-                setName("Example Task");
-                setContent("This is an example task");
-                setTaskPriority(Priority.HIGH);
-                setTaskstatus(TaskStatus.IN_PROGRESS);
-                setTime(LocalTime.now());
-                setDate(LocalDate.now());
-                setCategory("Example Category");
-                setTags(new HashSet<>(Arrays.asList("tag1", "tag2", "tag3")));
-                setDateTimeReminder(LocalDateTime.now());
-                setTaskList(new TodoList() {{ setName("Example TodoList"); }});
-            }};
             //when
             when(taskService.findByCategory(category)).thenReturn(Optional.ofNullable(task));
             Optional<ResponseEntity<Task>> result =  Optional.ofNullable(taskController.findbycategory(category));
 
             //then
             assertEquals(result.get().getBody(),task);
+        }
 
+        @Test
+    void itShouldCheckIfTaskIsNotFoundByCategory() throws ResponseStatusException {
+
+            //given
+            String category = "category1";
+            //when
+            when(taskService.findByCategory(category)).thenThrow(new ResponseStatusException(HttpStatus.NOT_FOUND));
+            ResponseStatusException exception = assertThrows(ResponseStatusException.class,()->{
+                taskController.findbycategory(category);
+            });
+            assertEquals(HttpStatus.NOT_FOUND,exception.getStatus());
 
 
         }
+
+        @Test
+    void itShouldCheckIfTaskIsFoundByTagsIn() throws ResponseStatusException {
+
+            //given
+            Set<String> tags = new HashSet<>(Arrays.asList("tag1","tag2","tag3"));
+            Task task = createTask();
+
+                //when
+            when(taskService.findByTagsIn(tags)).thenReturn(Optional.ofNullable(task));
+            Optional<ResponseEntity<Task>> result = Optional.ofNullable(taskController.findByTagsIn(tags));
+                //then
+            assertEquals(result.get().getBody(),task);
+            System.out.println("result is "+result.get().getBody());
+            System.out.println("tested task object :"+task );
+        }
+
+        @Test
+    void itShouldCheckIfTaskIsCreatedSuccesFully(){
+
+            //given
+            TaskDto taskDto = createDTotaskForIntegrationTest();
+            Task taskEntity = taskDto.toEntity(taskDto); // Convert TaskDto to Task entity
+            //when
+            when(taskService.save(taskEntity)).thenReturn(taskEntity);
+            ResponseEntity<TaskDto> result =taskController.createTask(taskDto);
+            //then
+            verify(taskService).save(taskEntity);
+            System.out.println("task creation status :"+ result.getStatusCode());
+
+
+        }
+
+        @Test
+    void itShouldCheckIfTaskisNotCreated() throws ResponseStatusException{
+                    //given
+            TaskDto taskDto = createDTotaskForIntegrationTest();
+            Task taskEntity = taskDto.toEntity(taskDto); // Convert TaskDto to Task entity
+            //when
+            when(taskService.save(taskEntity)).thenThrow(new ResponseStatusException(HttpStatus.NOT_FOUND));
+            ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> {
+             taskController.createTask(taskDto);
+    });
+            System.out.println("excpetion status : " + exception.getStatus());
+            System.out.println("http status : "+HttpStatus.NOT_FOUND);
+
+
+            //then
+             assertEquals(HttpStatus.NOT_FOUND, exception.getStatus());
+             verify(taskService).save(taskEntity);
+
+
+        }
+
 
     }
