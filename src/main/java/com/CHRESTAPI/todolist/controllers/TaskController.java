@@ -121,6 +121,7 @@ public class TaskController {
     @PostMapping("/updatetask/{taskId}")
     public ResponseEntity<TaskDto> editTask(@PathVariable Long taskId, @RequestBody TaskDto updatedTaskDto){
         Optional<Task> optionalTask = taskService.finByTaskId(taskId);
+        System.out.println("OptionalTask :"+optionalTask+" is it present ? : "+optionalTask.isPresent());
         if(optionalTask.isPresent()){
             Task task = optionalTask.get();
             task.setName(updatedTaskDto.getName());

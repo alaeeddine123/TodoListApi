@@ -7,6 +7,7 @@ import com.CHRESTAPI.todolist.enums.TaskStatus;
 import com.CHRESTAPI.todolist.exception.ElementNotFoundException;
 import com.CHRESTAPI.todolist.repositories.TaskRepository;
 import com.CHRESTAPI.todolist.services.TaskService;
+import lombok.extern.log4j.Log4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -17,6 +18,7 @@ import java.util.Set;
 
 
 @Service
+
 public class TaskServiceImpl  implements TaskService {
 
 
@@ -30,6 +32,7 @@ public class TaskServiceImpl  implements TaskService {
     @Override
     public Optional<Task> finByTaskId(Long id) {
 
+        System.out.println(" Id recieved as input in service method findby task id : "+id);
         if(id == null || id <= 0){
             throw  new  IllegalArgumentException("Invalid task id");
         }

@@ -16,6 +16,9 @@ import java.time.LocalTime;
 import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import com.CHRESTAPI.todolist.enums.Priority;
+import org.springframework.test.annotation.Rollback;
+import org.springframework.test.context.transaction.TestTransaction;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.swing.text.html.Option;
@@ -310,6 +313,34 @@ class TaskControllerTest {
 
 
         }
+
+            @Test
+         //   @Rollback(false)  // Disable automatic rollback for this method
+             //     @Transactional(transactionManager = "transactionManager")
+            @Transactional
+
+            void itShouldCheckIfTaskIsUpdatedSuccesfully() {
+                //given
+                TaskDto taskDto = createDTotaskForIntegrationTest();
+
+                Task taskEntity = taskDto.toEntity(taskDto); // Convert TaskDto to Task entity
+                //when
+                when(taskService.save(taskEntity)).thenReturn(taskEntity);
+                ResponseEntity<TaskDto> result =taskController.createTask(taskDto);
+
+                System.out.println("task creation status :"+ result.getStatusCode());
+                System.out.println("task is created with id  :"+result.getBody().getId());
+
+
+                System.out.println("task created is : "+result.getBody());
+                Long taskId = result.getBody().getId(); // Capture the task ID
+                System.out.println("taskId is   : "+taskId);
+                    TaskDto updatedTaskDto = new TaskDto();
+                    ResponseEntity<TaskDto> result1 = taskController.editTask(taskId, updatedTaskDto);
+                    verify(taskService).save(taskEntity);
+
+
+            }
 
 
     }
